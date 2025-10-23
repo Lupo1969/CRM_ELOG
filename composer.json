@@ -1,6 +1,4 @@
 {
-    "name": "CRM-ELOG",
-    "description": "CRM para forwarders",
     "type": "project",
     "require": {
         "php": "^8.1"

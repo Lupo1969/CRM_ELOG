@@ -1,8 +1,8 @@
 {
   "build": {
-    "builder": "NIXPACKS"
+    "builder": "nixpacks"
   },
   "deploy": {
-    "startCommand": "apache2-foreground"
+    "startCommand": "php -S 0.0.0.0:8000"
   }
 }
