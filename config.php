@@ -1,22 +1,25 @@
 <?php
-// Copia este archivo a config.php y configura tus credenciales
-$host = $_ENV['DB_HOST'] ?? '127.0.0.1';
-$dbname = $_ENV['DB_NAME'] ?? 'crm_aduanas';
-$username = $_ENV['DB_USER'] ?? 'root';
-$password = $_ENV['DB_PASSWORD'] ?? '';
+// config.php - Compatible con XAMPP local y Railway.app
 
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+// Detectar si estamos en Railway (Railway define RAILWAY env var)
+if (getenv('RAILWAY_ENVIRONMENT')) {
+    // Entorno Railway: usar variables de entorno
+    $host = $_ENV['DB_HOST'] ?? 'localhost';
+    $dbname = $_ENV['DB_NAME'] ?? 'railway';
+    $username = $_ENV['DB_USER'] ?? 'root';
+    $password = $_ENV['DB_PASSWORD'] ?? '';
+} else {
+    // Entorno local (XAMPP): usar credenciales fijas
+    $host = '127.0.0.1';
+    $dbname = 'crm_aduanas';  // o 'gltcomex_crm' según tu BD
+    $username = 'root';
+    $password = ''; // XAMPP no tiene contraseña por defecto
+}
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $db_user, $db_pass);
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
-}
-
-function limpiarRUT($rut) {
-    return preg_replace('/[^0-9kK]/', '', strtolower($rut));
 }
 ?>

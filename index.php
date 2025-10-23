@@ -1,58 +1,58 @@
 <?php
-// === 1. INICIO ABSOLUTO: sin salida, sin HTML ===
-require_once __DIR__ . '/includes/security_headers.php';
-require_once __DIR__ . '/includes/auth_check.php';
-require_once __DIR__ . '/config.php';
+    // === 1. INICIO ABSOLUTO: sin salida, sin HTML ===
+    require_once __DIR__ . '/includes/security_headers.php';
+    require_once __DIR__ . '/includes/auth_check.php';
+    require_once __DIR__ . '/config.php';
 
-// === 2. LISTA DE PÁGINAS VÁLIDAS ===
-$validPages = [
-    'agentes',
-    'aplicacion_costos',
-    'comerciales',
-    'commoditys',
-    'conceptos',
-    'contactos',
-    'incoterm',
-    'lugares',
-    'medios_transporte',
-    'operacion',
-    'proveedor_pnac',
-    'tservicios',        // ← Mantenedor de tipos de servicios (cartaservicios)
-    'trafico',
-    'dashboard',
-    'prospectos'
-];
+    // === 2. LISTA DE PÁGINAS VÁLIDAS ===
+    $validPages = [
+        'agentes',
+        'aplicacion_costos',
+        'comerciales',
+        'commoditys',
+        'conceptos',
+        'contactos',
+        'incoterm',
+        'lugares',
+        'medios_transporte',
+        'operacion',
+        'proveedor_pnac',
+        'tservicios',        // ← Mantenedor de tipos de servicios (cartaservicios)
+        'trafico',
+        'dashboard',
+        'prospectos'
+    ];
 
-$page = $_GET['page'] ?? 'dashboard';
-$safePage = in_array($page, $validPages) ? $page : 'dashboard';
+    $page = $_GET['page'] ?? 'dashboard';
+    $safePage = in_array($page, $validPages) ? $page : 'dashboard';
 
-// === 3. LISTA DE MANTENEDORES CON LÓGICA (CRUD) ===
-$mantenedores_con_logica = [
-    'agentes',
-    'aplicacion_costos',
-    'comerciales',
-    'commoditys',
-    'conceptos',
-    'contactos',
-    'incoterm',
-    'lugares',
-    'medios_transporte',
-    'operacion',
-    'proveedor_pnac',
-    'tservicios',        // ← Debe coincidir con el nombre en el menú
-    'trafico'
-];
+    // === 3. LISTA DE MANTENEDORES CON LÓGICA (CRUD) ===
+    $mantenedores_con_logica = [
+        'agentes',
+        'aplicacion_costos',
+        'comerciales',
+        'commoditys',
+        'conceptos',
+        'contactos',
+        'incoterm',
+        'lugares',
+        'medios_transporte',
+        'operacion',
+        'proveedor_pnac',
+        'tservicios',        // ← Debe coincidir con el nombre en el menú
+        'trafico'
+    ];
 
-// === 4. PROCESAR LÓGICA DE MANTENEDORES (ANTES DE CUALQUIER SALIDA HTML) ===
-if (in_array($safePage, $mantenedores_con_logica)) {
-    // Mapeo especial: tservicios → servicios (archivos reales)
-    $nombre_archivo = ($safePage === 'tservicios') ? 'servicios' : $safePage;
-    $logicFile = __DIR__ . "/pages/{$nombre_archivo}_logic.php";
-    if (file_exists($logicFile)) {
-        require_once $logicFile;
-        // Si hay redirección (header + exit), el script ya terminó aquí
+    // === 4. PROCESAR LÓGICA DE MANTENEDORES (ANTES DE CUALQUIER SALIDA HTML) ===
+    if (in_array($safePage, $mantenedores_con_logica)) {
+        // Mapeo especial: tservicios → servicios (archivos reales)
+        $nombre_archivo = ($safePage === 'tservicios') ? 'servicios' : $safePage;
+        $logicFile = __DIR__ . "/pages/{$nombre_archivo}_logic.php";
+        if (file_exists($logicFile)) {
+            require_once $logicFile;
+            // Si hay redirección (header + exit), el script ya terminó aquí
+        }
     }
-}
 ?>
 
 <!DOCTYPE html>
